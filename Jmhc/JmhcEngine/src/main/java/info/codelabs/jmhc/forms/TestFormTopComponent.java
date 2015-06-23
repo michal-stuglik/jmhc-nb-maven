@@ -5,44 +5,50 @@
  */
 package info.codelabs.jmhc.forms;
 
+import java.awt.Color;
+import java.io.IOException;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.IOColorLines;
+import org.openide.windows.InputOutput;
+
+
 
 /**
  * Top component which displays something.
  */
 @ConvertAsProperties(
-        dtd = "-//info.codelabs.jmhc.forms//Output//EN",
+        dtd = "-//info.codelabs.jmhc.forms//TestForm//EN",
         autostore = false
 )
 @TopComponent.Description(
-        preferredID = "OutputTopComponent",
+        preferredID = "TestFormTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS
 )
-@TopComponent.Registration(mode = "output", openAtStartup = true)
-@ActionID(category = "Window", id = "info.codelabs.jmhc.forms.OutputTopComponent")
+@TopComponent.Registration(mode = "editor", openAtStartup = true)
+@ActionID(category = "Window", id = "info.codelabs.jmhc.forms.TestFormTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
-        displayName = "#CTL_OutputAction",
-        preferredID = "OutputTopComponent"
+        displayName = "#CTL_TestFormAction",
+        preferredID = "TestFormTopComponent"
 )
 @Messages({
-    "CTL_OutputAction=Output",
-    "CTL_OutputTopComponent=Output Window",
-    "HINT_OutputTopComponent=This is a Output window"
+    "CTL_TestFormAction=TestForm",
+    "CTL_TestFormTopComponent=TestForm Window",
+    "HINT_TestFormTopComponent=This is a TestForm window"
 })
-public final class OutputTopComponent extends TopComponent {
+public final class TestFormTopComponent extends TopComponent {
 
-    public OutputTopComponent() {
+    public TestFormTopComponent() {
         initComponents();
-        setName(Bundle.CTL_OutputTopComponent());
-        setToolTipText(Bundle.HINT_OutputTopComponent());
+        setName(Bundle.CTL_TestFormTopComponent());
+        setToolTipText(Bundle.HINT_TestFormTopComponent());
         putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
-        putClientProperty(TopComponent.PROP_KEEP_PREFERRED_SIZE_WHEN_SLIDED_IN, Boolean.TRUE);
 
     }
 
@@ -55,22 +61,30 @@ public final class OutputTopComponent extends TopComponent {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea_Out = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
 
-        jTextArea_Out.setColumns(20);
-        jTextArea_Out.setRows(5);
-        jScrollPane1.setViewportView(jTextArea_Out);
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(TestFormTopComponent.class, "TestFormTopComponent.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(294, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(263, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -81,14 +95,34 @@ public final class OutputTopComponent extends TopComponent {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        try {
+
+            InputOutput io = org.openide.windows.IOProvider.getDefault().getIO("Colorful Output", null);
+            IOColorLines.println(io, "Hello....", Color.GREEN);
+            IOColorLines.println(io, "how....", Color.RED);
+            IOColorLines.println(io, "are....", Color.BLUE);
+            IOColorLines.println(io, "you...?", Color.MAGENTA);
+                        
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+
+
+
+        
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea_Out;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {

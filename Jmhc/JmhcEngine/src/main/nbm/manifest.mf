@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Localizing-Bundle: info/codelabs/jmhcengine/Bundle.properties
+OpenIDE-Module-Requires: org.openide.windows.WindowManager
 
