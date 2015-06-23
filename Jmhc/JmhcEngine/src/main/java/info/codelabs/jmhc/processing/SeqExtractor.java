@@ -399,8 +399,8 @@ public class SeqExtractor extends Thread implements Runnable {
 
             try {
 
-                mismatch_tags = new HashMap<String, String>();
-                mismatch_tags_right = new HashMap<String, String>();
+                mismatch_tags = new HashMap<>();
+                mismatch_tags_right = new HashMap<>();
 
                 //TAGvariants
                 if (this.allowOneMismatchInTag) {

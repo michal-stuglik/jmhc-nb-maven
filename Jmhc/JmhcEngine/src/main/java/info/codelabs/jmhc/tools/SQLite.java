@@ -25,14 +25,10 @@ public class SQLite {
 
     public Connection getConnection() throws SQLException, ClassNotFoundException {
         if (this.connection == null || this.connection.isClosed()) {
+            Class.forName("org.sqlite.JDBC");
             try {
-                Class.forName("org.sqlite.JDBC");
-                try {
-                    this.connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-                } catch (SQLException ex) {
-                    throw ex;
-                }
-            } catch (ClassNotFoundException ex) {
+                this.connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+            } catch (SQLException ex) {
                 throw ex;
             }
             return this.connection;
@@ -49,7 +45,7 @@ public class SQLite {
         //return  this.getConnection().createStatement().execute(sql);
 
         Statement st = this.getConnection().createStatement();
-        boolean bool_exe  = st.execute(sql);
+        boolean bool_exe = st.execute(sql);
         st.close();
         return bool_exe;
     }

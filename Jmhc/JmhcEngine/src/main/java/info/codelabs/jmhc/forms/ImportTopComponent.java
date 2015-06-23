@@ -20,6 +20,8 @@ import org.openide.awt.ActionReference;
 import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.IOProvider;
+import org.openide.windows.InputOutput;
 
 /**
  * Top component which displays something.
@@ -53,14 +55,17 @@ public final class ImportTopComponent extends TopComponent {
     private final long stopTime = 0;
     private SeqExtractor mSeqExtractor = null;
     private final DBExtractor mDBExtractor = null;
+    private final String IOWindow = "Import";
+    protected InputOutput io = null;
 
     public ImportTopComponent() {
         initComponents();
         setName(Bundle.CTL_ImportTopComponent());
         setToolTipText(Bundle.HINT_ImportTopComponent());
         putClientProperty(TopComponent.PROP_UNDOCKING_DISABLED, Boolean.TRUE);
-        
 
+        // output per component
+        io = IOProvider.getDefault().getIO(IOWindow, false);
     }
 
     /**
@@ -387,18 +392,25 @@ public final class ImportTopComponent extends TopComponent {
         try {
             String sqlitedb = "/home/michal/Dropbox/share_work/sample_dir/sample_jmhc/Haslinafiles/has2.sqlite";
 
+            io.getOut().println("DB path: " + sqlitedb);
+//            io.getOut().close();
+//            io.getErr().close();
+//            io.select();
             // TODO: temporal dbconnection
-            Controller mController = null;
-            mController = new Controller();
+            Controller mController = new Controller();
             mController.ConnectToDataBase(sqlitedb);
-            
-           this.mProgramControler =  mController.ProgramControler;
+
+            this.mProgramControler = mController.ProgramControler;
 
             // sequence extraction
             this.ExtractSequences();
 
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+        } finally {
+
+            io.getOut().close();
+            io.getErr().close();
         }
     }//GEN-LAST:event_jButton_RUNActionPerformed
 
