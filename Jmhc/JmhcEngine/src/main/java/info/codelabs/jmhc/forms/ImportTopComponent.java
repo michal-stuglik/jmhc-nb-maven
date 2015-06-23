@@ -56,7 +56,7 @@ public final class ImportTopComponent extends TopComponent {
     private SeqExtractor mSeqExtractor = null;
     private final DBExtractor mDBExtractor = null;
     private final String IOWindow = "Import";
-    protected InputOutput io = null;
+    private InputOutput mInputOutput = null;
 
     public ImportTopComponent() {
         initComponents();
@@ -65,7 +65,7 @@ public final class ImportTopComponent extends TopComponent {
         putClientProperty(TopComponent.PROP_UNDOCKING_DISABLED, Boolean.TRUE);
 
         // output per component
-        io = IOProvider.getDefault().getIO(IOWindow, false);
+        mInputOutput = IOProvider.getDefault().getIO(IOWindow, false);
     }
 
     /**
@@ -392,10 +392,10 @@ public final class ImportTopComponent extends TopComponent {
         try {
             String sqlitedb = "/home/michal/Dropbox/share_work/sample_dir/sample_jmhc/Haslinafiles/has2.sqlite";
 
-            io.getOut().println("DB path: " + sqlitedb);
-//            io.getOut().close();
-//            io.getErr().close();
-//            io.select();
+            mInputOutput.getOut().println("DB path: " + sqlitedb);
+//            mInputOutput.getOut().close();
+//            mInputOutput.getErr().close();
+//            mInputOutput.select();
             // TODO: temporal dbconnection
             Controller mController = new Controller();
             mController.ConnectToDataBase(sqlitedb);
@@ -409,8 +409,8 @@ public final class ImportTopComponent extends TopComponent {
             Exceptions.printStackTrace(ex);
         } finally {
 
-            io.getOut().close();
-            io.getErr().close();
+            mInputOutput.getOut().close();
+            mInputOutput.getErr().close();
         }
     }//GEN-LAST:event_jButton_RUNActionPerformed
 
@@ -418,7 +418,7 @@ public final class ImportTopComponent extends TopComponent {
         try {
 
             ListModel model = jList1_files.getModel();
-            List<String> fileList = new ArrayList<String>();
+            List<String> fileList = new ArrayList<>();
 
             for (int i = 0; i < model.getSize(); i++) {
                 String filePath = (String) model.getElementAt(i);
@@ -478,7 +478,7 @@ public final class ImportTopComponent extends TopComponent {
                 taglength = Integer.parseInt(jTextField_TAG_Length.getText().trim());
             }
 
-            mSeqExtractor = new SeqExtractor(mProgramControler, jLabel_statusLabel);
+            mSeqExtractor = new SeqExtractor(mProgramControler, mInputOutput);
             mSeqExtractor.setCutoff(jCheckBox_cutoff.isSelected());
             mSeqExtractor.setPrimerRcutoff(primerRCutoff);
             mSeqExtractor.setPrimerF(jTextField_PrimerF.getText().trim());

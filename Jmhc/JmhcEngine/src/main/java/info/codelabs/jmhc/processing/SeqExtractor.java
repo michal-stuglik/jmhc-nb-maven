@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JLabel;
 //import info.codelabs.jmhc.forms.ExtractorFrame;
 import info.codelabs.jmhc.forms.ProgramControler;
 import info.codelabs.jmhc.objects.DBSettings;
@@ -34,6 +33,8 @@ import info.codelabs.jmhc.tools.SeqUtils;
 import info.codelabs.jmhc.objects.TAG;
 import info.codelabs.jmhc.objects.TAGvariants;
 import org.biojava.bio.seq.io.SeqIOTools;
+import org.biojava.bio.symbol.IllegalAlphabetException;
+import org.openide.windows.InputOutput;
 
 public class SeqExtractor extends Thread implements Runnable {
 
@@ -43,9 +44,9 @@ public class SeqExtractor extends Thread implements Runnable {
     private SymbolList PrimerRcR;
     protected int TAGlength = 0;
     private int primerRcutoff = 0;
-    private JLabel jLabel_statusLabel;
+    private final InputOutput mInputOutput;
     private int totalCounter;
-    private ProgramControler mProgramControler;
+    private final ProgramControler mProgramControler;
 //    private ExtractorFrame parentFrame;
     private SymbolList MustStartSequence;
     private Boolean allowOneMismatchInTag;
@@ -60,9 +61,9 @@ public class SeqExtractor extends Thread implements Runnable {
         this.allowOneMismatchInTag = allowOneMismatchInTag;
     }
 
-    public SeqExtractor(ProgramControler mProgramControler, JLabel jLabel_statusLabel/*, ExtractorFrame parentFrame*/) {
+    public SeqExtractor(ProgramControler mProgramControler, InputOutput mInputOutput/*, ExtractorFrame parentFrame*/) {
         this.mProgramControler = mProgramControler;
-        this.jLabel_statusLabel = jLabel_statusLabel;
+        this.mInputOutput = mInputOutput;
 //        this.parentFrame = parentFrame;
     }
     private boolean oneSideTags = true;
@@ -283,8 +284,7 @@ public class SeqExtractor extends Thread implements Runnable {
             this.pre_runSettings();
 
             //fasta files processing:
-            for (int i = 0; i < fileList.size(); i++) {
-                String fileNamePath = fileList.get(i);
+            for (String fileNamePath : fileList) {
                 this.fastaFilesProcess(fileNamePath);
             }
 
@@ -306,11 +306,11 @@ public class SeqExtractor extends Thread implements Runnable {
             mProgramControler.getDBSettings().log_InfoTable("extract", "extraction to file", "");
 
             this.setInfo("processed: " + totalCounter + ", imported: " + insertCounter);
-            SeqUtils.SetStatus(jLabel_statusLabel, "success!" + " " + this.getInfo());
+            mInputOutput.getOut().println("success!" + " " + this.getInfo());
 //            JOptionPane.showMessageDialog(this.parentFrame, "success!" + " " + this.getInfo(), this.parentFrame.getName(), JOptionPane.INFORMATION_MESSAGE);
 
         } catch (InterruptedException ex) {
-            SeqUtils.SetStatus(jLabel_statusLabel, ex.getMessage());
+            mInputOutput.getOut().println(ex.getMessage());
             Logger.getLogger(DBSettings.loggerProgram).log(Level.WARNING, ex.getMessage(), ex);
 //            JOptionPane.showMessageDialog(this.parentFrame, ex.getMessage(), this.parentFrame.getName(), JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
@@ -348,13 +348,13 @@ public class SeqExtractor extends Thread implements Runnable {
 
                     if (tag_l % 2 != 0) {//just checking
                         mProgramControler.getDBSettings().log_InfoTable("import", "allow one mismatch in tag", "this option is skipped, non-even tag length in database");
-                        mismatch_tags = new HashMap<String, String>();
+                        mismatch_tags = new HashMap<>();
                         return;
                     }
 
                     if (this.TAGlength != (tag_l / 2)) {
                         mProgramControler.getDBSettings().log_InfoTable("import", "allow one mismatch in tag", "this option is skipped, tag length is differs from " + Integer.toString(this.TAGlength));
-                        mismatch_tags = new HashMap<String, String>();
+                        mismatch_tags = new HashMap<>();
                         return;
                     }
 
@@ -368,9 +368,7 @@ public class SeqExtractor extends Thread implements Runnable {
                     mismatch_tags_right = mTAGvariants_r.fillHashMap(mismatch_tags_right);
                 }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(SeqExtractor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(SeqExtractor.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (rs != null) {
@@ -432,7 +430,8 @@ public class SeqExtractor extends Thread implements Runnable {
 
                     //thread update:
                     if (totalCounter % 1000 == 0) {
-                        SeqUtils.SetStatus(jLabel_statusLabel, "file: " + fileName + ", sequences: " + sequenceCounter + " total: " + totalCounter);
+                        mInputOutput.getOut().println("file: " + fileName + ", sequences: " + sequenceCounter + " total: " + totalCounter);
+//                        SeqUtils.SetStatus(jLabel_statusLabel, "file: " + fileName + ", sequences: " + sequenceCounter + " total: " + totalCounter);
                     }
 
                     Sequence sequence = null;
@@ -470,12 +469,9 @@ public class SeqExtractor extends Thread implements Runnable {
                     time_iter_start = System.currentTimeMillis();
                 }
 
-            } catch (FileNotFoundException ex) {
-                SeqUtils.SetStatus(jLabel_statusLabel, ex.getMessage());
-                Logger.getLogger(DBSettings.loggerProgram).log(Level.SEVERE, ex.getMessage(), ex);
-//                JOptionPane.showMessageDialog(parentFrame, ex.getMessage(), parentFrame.getName(), JOptionPane.ERROR_MESSAGE);
-            } catch (BioException ex) {
-                SeqUtils.SetStatus(jLabel_statusLabel, ex.getMessage());
+            } catch (FileNotFoundException | BioException ex) {
+                mInputOutput.getOut().println(ex.getMessage());
+
                 Logger.getLogger(DBSettings.loggerProgram).log(Level.SEVERE, ex.getMessage(), ex);
 //                JOptionPane.showMessageDialog(parentFrame, ex.getMessage(), parentFrame.getName(), JOptionPane.ERROR_MESSAGE);
             }
@@ -638,7 +634,7 @@ public class SeqExtractor extends Thread implements Runnable {
                 } catch (IllegalArgumentException ex) {
                     Logger.getLogger(DBSettings.loggerDataBase).log(Level.SEVERE, ex.getMessage(), ex);
                     return;
-                } catch (Exception ex) {
+                } catch (IndexOutOfBoundsException | IllegalAlphabetException ex) {
                     throw ex;
                 }
 
@@ -699,7 +695,7 @@ public class SeqExtractor extends Thread implements Runnable {
                 long time_seq_insert_end = System.currentTimeMillis();
                 System.out.println("Seq insert: " + String.valueOf(time_seq_insert_end - time_seq_insert_start));
 
-            } catch (Exception ex) {
+            } catch (SQLException | ClassNotFoundException ex) {
                 throw ex;
             }
 
