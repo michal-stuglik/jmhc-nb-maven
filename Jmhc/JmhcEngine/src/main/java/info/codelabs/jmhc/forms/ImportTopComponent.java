@@ -63,7 +63,7 @@ public final class ImportTopComponent extends TopComponent {
         setName(Bundle.CTL_ImportTopComponent());
         setToolTipText(Bundle.HINT_ImportTopComponent());
         putClientProperty(TopComponent.PROP_UNDOCKING_DISABLED, Boolean.TRUE);
-
+        putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
         // output per component
         mInputOutput = IOProvider.getDefault().getIO(IOWindow, false);
     }
@@ -101,7 +101,6 @@ public final class ImportTopComponent extends TopComponent {
         jPanel9 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1_files = new javax.swing.JList();
-        jLabel_statusLabel = new javax.swing.JLabel();
 
         setDisplayName(org.openide.util.NbBundle.getMessage(ImportTopComponent.class, "ImportTopComponent.displayName")); // NOI18N
 
@@ -152,9 +151,9 @@ public final class ImportTopComponent extends TopComponent {
                 .addComponent(jCheckBox_F)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox_R)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton_RUN)
-                .addContainerGap())
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(ImportTopComponent.class, "ImportTopComponent.jPanel1.border.title"))); // NOI18N
@@ -335,24 +334,15 @@ public final class ImportTopComponent extends TopComponent {
         });
         jScrollPane2.setViewportView(jList1_files);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel_statusLabel, org.openide.util.NbBundle.getMessage(ImportTopComponent.class, "ImportTopComponent.jLabel_statusLabel.text")); // NOI18N
-
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jLabel_statusLabel)
-                .addGap(0, 152, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel_statusLabel)
-                .addGap(0, 88, Short.MAX_VALUE))
+            .addComponent(jScrollPane2)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -525,7 +515,6 @@ public final class ImportTopComponent extends TopComponent {
     private javax.swing.JCheckBox jCheckBox_cutoff;
     private javax.swing.JCheckBox jCheckBox_fixed_length;
     private javax.swing.JCheckBox jCheckBox_sequence_starts;
-    private javax.swing.JLabel jLabel_statusLabel;
     private javax.swing.JList jList1_files;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
