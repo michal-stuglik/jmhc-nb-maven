@@ -15,34 +15,34 @@ import org.openide.util.NbBundle.Messages;
  * Top component which displays something.
  */
 @ConvertAsProperties(
-        dtd = "-//info.codelabs.jmhc.forms//Explorer//EN",
+        dtd = "-//info.codelabs.jmhc.forms//Project//EN",
         autostore = false
 )
 @TopComponent.Description(
-        preferredID = "ExplorerTopComponent",
+        preferredID = "ProjectTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS
 )
 @TopComponent.Registration(mode = "explorer", openAtStartup = true)
-@ActionID(category = "Window", id = "info.codelabs.jmhc.forms.ExplorerTopComponent")
+@ActionID(category = "Window", id = "info.codelabs.jmhc.forms.ProjectTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
-        displayName = "#CTL_ExplorerAction",
-        preferredID = "ExplorerTopComponent"
+        displayName = "#CTL_ProjectAction",
+        preferredID = "ProjectTopComponent"
 )
 @Messages({
-    "CTL_ExplorerAction=Explorer",
-    "CTL_ExplorerTopComponent=Explorer Window",
-    "HINT_ExplorerTopComponent=This is a Explorer window"
+    "CTL_ProjectAction=Project",
+    "CTL_ProjectTopComponent=Project Window",
+    "HINT_ProjectTopComponent=This is a Project window"
 })
-public final class ExplorerTopComponent extends TopComponent {
+public final class ProjectTopComponent extends TopComponent {
 
-    public ExplorerTopComponent() {
+    public ProjectTopComponent() {
         initComponents();
-        setName(Bundle.CTL_ExplorerTopComponent());
-        setToolTipText(Bundle.HINT_ExplorerTopComponent());
+        setName(Bundle.CTL_ProjectTopComponent());
+        setToolTipText(Bundle.HINT_ProjectTopComponent());
+        putClientProperty(TopComponent.PROP_DRAGGING_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_UNDOCKING_DISABLED, Boolean.TRUE);
-        putClientProperty(TopComponent.PROP_KEEP_PREFERRED_SIZE_WHEN_SLIDED_IN, Boolean.TRUE);
 
     }
 
@@ -55,16 +55,20 @@ public final class ExplorerTopComponent extends TopComponent {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTree1 = new javax.swing.JTree();
+
+        jScrollPane1.setViewportView(jTree1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -81,6 +85,8 @@ public final class ExplorerTopComponent extends TopComponent {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {

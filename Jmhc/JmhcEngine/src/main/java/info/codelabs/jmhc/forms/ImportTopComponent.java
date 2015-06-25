@@ -153,7 +153,7 @@ public final class ImportTopComponent extends TopComponent {
                 .addComponent(jCheckBox_R)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton_RUN)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(ImportTopComponent.class, "ImportTopComponent.jPanel1.border.title"))); // NOI18N
@@ -177,7 +177,7 @@ public final class ImportTopComponent extends TopComponent {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jTextField_PrimerF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 13, Short.MAX_VALUE))
+                .addGap(0, 14, Short.MAX_VALUE))
         );
 
         jTextField_PrimerF.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(ImportTopComponent.class, "ImportTopComponent.jTextField_PrimerF.AccessibleContext.accessibleName")); // NOI18N
